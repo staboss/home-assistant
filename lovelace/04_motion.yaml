@@ -1,0 +1,105 @@
+title: Движение
+icon: mdi:run-fast
+cards:
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Движение
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_home
+            type: custom:multiple-entity-row
+            name: Дом
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: input_boolean.guests_motion_state
+                name: Гости
+                toggle: true
+              - entity: input_boolean.home_motion_state
+                name: Автоматизация
+                toggle: true
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_workroom
+            type: custom:multiple-entity-row
+            name: Кабинет
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: sensor.motion_detected_workroom
+                name: Движение было
+              - entity: input_boolean.workroom_motion_state
+                name: Автоматизация
+                toggle: true
+          - type: divider
+          - entity: input_number.workroom_illuminance_lux
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_kitchen
+            type: custom:multiple-entity-row
+            name: Кухня
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: sensor.motion_detected_kitchen
+                name: Движение было
+              - entity: input_boolean.kitchen_motion_state
+                name: Автоматизация
+                toggle: true
+          - type: divider
+          - entity: input_number.kitchen_illuminance_lux
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_bathroom
+            type: custom:multiple-entity-row
+            name: Ванная
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: sensor.motion_detected_bathroom
+                name: Движение было
+              - entity: input_boolean.bathroom_motion_state
+                name: Автоматизация
+                toggle: true
+          - type: divider
+          - entity: input_number.bathroom_humidity_min
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_hallway
+            type: custom:multiple-entity-row
+            name: Прихожая
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: sensor.motion_detected_hallway
+                name: Движение было
+              - entity: input_boolean.hallway_motion_state
+                name: Автоматизация
+                toggle: true
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_storage
+            type: custom:multiple-entity-row
+            name: Кладовка
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: sensor.motion_detected_storage
+                name: Движение было
+              - entity: input_boolean.storage_motion_state
+                name: Автоматизация
+                toggle: true

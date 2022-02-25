@@ -1,0 +1,59 @@
+- platform: uptime
+  name: online
+  unit_of_measurement: minutes
+
+- platform: template
+  sensors:
+    system_last_boot:
+      friendly_name: "Последняя перезагрузка"
+      entity_id:
+        - sensor.time
+      value_template: >
+        {% set uptime = as_timestamp(now())-as_timestamp(states.sensor.last_boot.state) | int %}
+        {% set minutes = ((uptime % 3600) / 60) | int %}
+        {% set hours = ((uptime % 86400) / 3600) | int %}
+        {% set days = (uptime / 86400) | int %}
+          {% if uptime > 1 %}
+            {% if days > 0 %}
+              {{ days }} д.
+            {% endif %}
+            {% if hours > 0 %}
+              {{ hours }} ч.
+            {% endif %}
+            {% if minutes > 0 %}
+              {{ minutes }} мин. назад
+            {% else %}
+              1 мин. назад
+            {% endif %}
+          {% else %}
+            1 мин. назад
+          {% endif %}
+      icon_template: mdi:restart
+
+- platform: template
+  sensors:
+    ha_last_boot:
+      friendly_name: "Home Assistant онлайн"
+      entity_id:
+        - sensor.time
+      value_template: >
+        {% set uptime = as_timestamp(now()) - as_timestamp(states('sensor.online')) | int %}
+        {% set minutes = ((uptime % 3600) / 60) | int %}
+        {% set hours = ((uptime % 86400) / 3600) | int %}
+        {% set days = (uptime / 86400) | int %}
+          {% if uptime > 1 %}
+            {% if days > 0 %}
+              {{ days }} д.
+            {% endif %}
+            {% if hours > 0 %}
+              {{ hours }} ч.
+            {% endif %}
+            {% if minutes > 0 %}
+              {{ minutes }} мин. назад
+            {% else %}
+              1 мин. назад
+            {% endif %}
+          {% else %}
+            1 мин. назад
+          {% endif %}
+      icon_template: mdi:clock-outline

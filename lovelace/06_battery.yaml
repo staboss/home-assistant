@@ -1,0 +1,74 @@
+title: Состояние заряда
+icon: mdi:battery-charging-medium
+cards:
+  - type: vertical-stack
+    cards:
+      - type: custom:battery-state-card
+        title: "Датчики движения"
+        entities:
+          - entity: sensor.aqara_motion_storage_1_battery
+            name: В кладовке
+          - entity: sensor.aqara_motion_hallway_1_battery
+            name: В прихожей
+          - entity: sensor.aqara_motion_bathroom_1_battery
+            name: На стене в ванной
+          - entity: sensor.aqara_motion_workroom_1_battery
+            name: На стене в кабинете
+          - entity: sensor.sonoff_motion_kitchen_1_battery
+            name: На потолке на кухне
+          - entity: sensor.sonoff_motion_bathroom_1_battery
+            name: На потолке в ванной
+          - entity: sensor.aqara_motion_kitchen_1_battery
+            name: Над плиткой на кухне
+          - entity: sensor.sonoff_motion_workroom_1_battery
+            name: Над столом в кабинете
+
+      - type: custom:battery-state-card
+        title: "Датчики температуры"
+        entities:
+          - entity: sensor.aqara_temperature_kitchen_1_battery
+            name: На кухне
+          - entity: sensor.aqara_temperature_bathroom_1_battery
+            name: В ванной
+          - entity: sensor.aqara_temperature_bedroom_1_battery
+            name: В спальне
+          - entity: sensor.aqara_temperature_workroom_1_battery
+            name: В кабинете
+          - entity: sensor.ble_mi_thermometer_bathroom_battery
+            name: В ванной (BLE)
+
+      - type: custom:battery-state-card
+        title: "Датчики освещенности"
+        entities:
+          - entity: sensor.mijia_light_kitchen_1_battery
+            name: На кухне
+          - entity: sensor.mijia_light_bedroom_1_battery
+            name: В спальне
+          - entity: sensor.mijia_light_workroom_1_battery
+            name: В кабинете
+
+  - type: vertical-stack
+    cards:
+      - type: custom:battery-state-card
+        title: "Датчики открытия"
+        entities:
+          - entity: sensor.aqara_door_hallway_1_battery
+            name: Входная дверь
+          - entity: sensor.aqara_window_bedroom_1_battery
+            name: Окно в спальне
+          - entity: sensor.aqara_window_workroom_1_battery
+            name: Окно в кабинете
+
+      - type: custom:battery-state-card
+        title: "Датчики вибрации"
+        entities:
+          - entity: sensor.aqara_vibration_kitchen_table_battery
+            name: Под столом на кухне
+          - entity: sensor.aqara_vibration_workroom_table_battery
+            name: Под столом в кабинете
+
+      - type: custom:battery-state-card
+        title: "Кнопки или выключатели"
+        entities:
+          - entity: sensor.aqara_button_1_battery
+            name: У входной двери

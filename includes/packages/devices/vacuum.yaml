@@ -1,0 +1,161 @@
+vacuum_cleaner:
+  input_select:
+    room_to_clean:
+      name: Действия
+      options:
+        - Ванная
+        - Кабинет
+        - Коридор
+        - Кухня
+        - Прихожая
+        - Спальня
+        - ↓↓↓↓↓↓↓↓↓↓↓
+        - На базу
+        - Пауза
+        - Старт
+        - Стоп
+      initial: ↓↓↓↓↓↓↓↓↓↓↓
+      icon: mdi:vacuum
+
+  automation:
+    - id: Уборка кабинета
+      alias: vacuum_workroom
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Кабинет"
+      condition: []
+      action:
+        - service: xiaomi_miio.vacuum_clean_segment
+          target:
+            entity_id: vacuum.roborock_s5_max
+          data:
+            segments: 16
+
+    - id: Уборка коридора
+      alias: vacuum_passage
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Коридор"
+      condition: []
+      action:
+        - service: xiaomi_miio.vacuum_clean_segment
+          target:
+            entity_id: vacuum.roborock_s5_max
+          data:
+            segments: 17
+
+    - id: Уборка кухни
+      alias: vacuum_kitchen
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Кухня"
+      condition: []
+      action:
+        - service: xiaomi_miio.vacuum_clean_segment
+          target:
+            entity_id: vacuum.roborock_s5_max
+          data:
+            segments: 18
+
+    - id: Уборка ванной
+      alias: vacuum_bathroom
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Ванная"
+      condition: []
+      action:
+        - service: xiaomi_miio.vacuum_clean_segment
+          target:
+            entity_id: vacuum.roborock_s5_max
+          data:
+            segments: 19
+
+    - id: Уборка спальни
+      alias: vacuum_bedrrom
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Спальня"
+      condition: []
+      action:
+        - service: xiaomi_miio.vacuum_clean_segment
+          target:
+            entity_id: vacuum.roborock_s5_max
+          data:
+            segments: 20
+
+    - id: Уборка прихожей
+      alias: vacuum_hallway
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Прихожая"
+      condition: []
+      action:
+        - service: xiaomi_miio.vacuum_clean_segment
+          target:
+            entity_id: vacuum.roborock_s5_max
+          data:
+            segments: 21
+
+    - id: Остановить уборку
+      alias: vacuum_stop_cleaning
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Стоп"
+      condition: []
+      action:
+        - service: vacuum.stop
+          target:
+            entity_id: vacuum.roborock_s5_max
+
+    - id: Возобновить уборку
+      alias: vacuum_start_cleaning
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Старт"
+      condition: []
+      action:
+        - service: vacuum.start
+          target:
+            entity_id: vacuum.roborock_s5_max
+
+    - id: Поставить уборку на паузу
+      alias: vacuum_pause_cleaning
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "Пауза"
+      condition: []
+      action:
+        - service: vacuum.pause
+          target:
+            entity_id: vacuum.roborock_s5_max
+
+    - id: Вернуться на базу
+      alias: vacuum_return_to_base
+      initial_state: true
+      trigger:
+        platform: state
+        entity_id: input_select.room_to_clean
+        to: "На базу"
+      condition: []
+      action:
+        - service: vacuum.return_to_base
+          target:
+            entity_id: vacuum.roborock_s5_max

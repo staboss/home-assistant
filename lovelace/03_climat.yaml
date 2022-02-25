@@ -1,0 +1,58 @@
+title: Климат
+icon: mdi:thermometer-lines
+cards:
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Климат
+
+      - type: entities
+        entities:
+          - entity: weather.staboss_smart_home
+
+          - type: section
+            label: Температура
+          - entity: sensor.temperature_workroom
+            name: Кабинет
+          - entity: sensor.temperature_bedroom
+            name: Спальня
+          - entity: sensor.temperature_bathroom
+            name: Ванная
+          - entity: sensor.temperature_kitchen
+            name: Кухня
+
+          - type: section
+            label: Влажность
+          - entity: sensor.humidity_workroom
+            name: Кабинет
+          - entity: sensor.humidity_bedroom
+            name: Спальня
+          - entity: sensor.humidity_bathroom
+            name: Ванная
+          - entity: sensor.humidity_kitchen
+            name: Кухня
+
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Температура
+            line_width: 3
+            entities:
+              - entity: sensor.temperature_home
+                show_state: true
+            show:
+              extrema: true
+              labels: false
+            line_color: "#fe4a49"
+
+          - type: custom:mini-graph-card
+            name: Влажность
+            line_width: 3
+            entities:
+              - entity: sensor.humidity_home
+                show_state: true
+            show:
+              extrema: true
+              labels: false
+            line_color: "#2ab7ca"

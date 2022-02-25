@@ -1,0 +1,43 @@
+title: Уборка
+icon: mdi:vacuum
+cards:
+  - type: vertical-stack
+    cards:
+      - type: entities
+        entities:
+          - input_select.room_to_clean
+
+      - type: entities
+        entities:
+          - entity: vacuum.roborock_s5_max
+            type: custom:multiple-entity-row
+            state_color: true
+            show_state: true
+            secondary_info: last-changed
+
+          - type: section
+            label: Последняя уборка
+          - entity: sensor.roborock_s5_max_last_clean_end
+            name: Завершилась
+          - entity: sensor.roborock_s5_max_last_clean_area
+            name: Было убрано
+          - entity: sensor.roborock_s5_max_last_clean_duration
+            name: Длилась
+
+          - type: section
+            label: Обслуживание
+          - entity: sensor.roborock_s5_max_filter_left
+            name: Фильтр
+          - entity: sensor.roborock_s5_max_side_brush_left
+            name: Боковая щетка
+          - entity: sensor.roborock_s5_max_main_brush_left
+            name: Основная щетка
+
+          - type: section
+            label: История уборки
+          - entity: sensor.roborock_s5_max_total_clean_area
+            name: Общая площадь
+          - entity: sensor.roborock_s5_max_total_clean_count
+            name: Число уборок
+          - entity: sensor.roborock_s5_max_total_duration
+            name: Общее время

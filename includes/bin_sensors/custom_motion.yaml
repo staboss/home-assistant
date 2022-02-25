@@ -1,0 +1,61 @@
+- platform: template
+  sensors:
+    motion_workroom:
+      friendly_name: "Движение в кабинете"
+      device_class: motion
+      value_template: >-
+        {{
+          is_state('binary_sensor.aqara_high_motion_workroom_1_occupancy', 'on') or
+          is_state('binary_sensor.sonoff_motion_workroom_1_occupancy', 'on') or
+          is_state('binary_sensor.aqara_motion_workroom_1_occupancy', 'on') or
+              (
+                is_state_attr('sensor.aqara_vibration_workroom_table_action', 'action', 'vibration') or
+                is_state_attr('sensor.aqara_vibration_workroom_table_action', 'action', 'tilt') or 
+                is_state_attr('sensor.aqara_vibration_workroom_table_action', 'action', 'drop') or
+                is_state_attr('sensor.aqara_vibration_workroom_table_action', 'action', '')
+              )
+        }}
+
+    motion_hallway:
+      friendly_name: "Движение в прихожей"
+      device_class: motion
+      value_template: >-
+        {{ is_state('binary_sensor.aqara_motion_hallway_1_occupancy', 'on') }}
+
+    motion_kitchen:
+      friendly_name: "Движение на кухне"
+      device_class: motion
+      value_template: >-
+        {{
+          is_state('binary_sensor.aqara_motion_kitchen_1_occupancy', 'on') or is_state('binary_sensor.sonoff_motion_kitchen_1_occupancy', 'on') or
+              (
+                is_state_attr('sensor.aqara_vibration_kitchen_table_action', 'action', 'vibration') or
+                is_state_attr('sensor.aqara_vibration_kitchen_table_action', 'action', 'tilt') or 
+                is_state_attr('sensor.aqara_vibration_kitchen_table_action', 'action', 'drop') or
+                is_state_attr('sensor.aqara_vibration_kitchen_table_action', 'action', '')
+              )
+        }}
+
+    motion_bathroom:
+      friendly_name: "Движение в ванной"
+      device_class: motion
+      value_template: >-
+        {{ is_state('binary_sensor.aqara_motion_bathroom_1_occupancy', 'on') or is_state('binary_sensor.sonoff_motion_bathroom_1_occupancy', 'on') }}
+
+    motion_storage:
+      friendly_name: "Движение в кладовке"
+      device_class: motion
+      value_template: >-
+        {{ is_state('binary_sensor.aqara_motion_storage_1_occupancy', 'on') }}
+
+    motion_home:
+      friendly_name: "Движение в доме"
+      device_class: motion
+      value_template: >-
+        {{ 
+            is_state('binary_sensor.motion_workroom', 'on') or
+            is_state('binary_sensor.motion_hallway', 'on') or
+            is_state('binary_sensor.motion_kitchen', 'on') or
+            is_state('binary_sensor.motion_bathroom', 'on') or
+            is_state('binary_sensor.motion_storage', 'on')
+        }}

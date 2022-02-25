@@ -1,0 +1,13 @@
+.DS_Store
+
+home-assistant*.*
+secrets*.*
+
+image/
+deps/
+
+.cloud/
+.vscode/
+.storage/
+
+zigbee2mqtt/

@@ -1,0 +1,9 @@
+title: Staboss Home
+
+views:
+  - !include lovelace/01_overview.yaml
+  - !include lovelace/02_light.yaml
+  - !include lovelace/03_climat.yaml
+  - !include lovelace/04_motion.yaml
+  - !include lovelace/05_vacuum.yaml
+  - !include lovelace/06_battery.yaml

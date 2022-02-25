@@ -1,0 +1,43 @@
+db_url: mysql://homeassistant:homeassistant@core-mariadb/homeassistant?charset=utf8mb4
+include:
+    domains:
+        - light
+        - switch
+    entity_globs:
+        # Inputs
+        - input_boolean.*
+        - input_number.*
+
+        # Vacuum
+        - vacuum.*
+        - sensor.roborock_s5_max_*
+        - binary_sensor.roborock_s5_max_*
+        
+        # Battery
+        - sensor.*_battery
+
+        # Binary Sensors
+        - bin_sensor.door_*
+        - bin_sensor.motion_*
+        - bin_sensor.window_*
+        - bin_sensor.windows_*
+
+        # Climat Sensors
+        - sensor.humidity_*
+        - sensor.pressure_*
+        - sensor.illuminance_*
+        - sensor.temperature_*
+    entities:
+        # System Sensors
+        - sensor.internet_speed
+        - sensor.memory_use_percent
+        - sensor.disk_use_percent
+        - sensor.processor_use
+        - sensor.maria_db_size
+        - sensor.disk_free
+
+        # Vibration Sensors
+        - sensor.aqara_vibration_kitchen_table_action
+        - sensor.aqara_vibration_kitchen_table_strength
+        - sensor.aqara_vibration_workroom_table_action
+        - sensor.aqara_vibration_workroom_table_strength

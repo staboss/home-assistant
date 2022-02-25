@@ -1,0 +1,39 @@
+bedroom:
+  sensor:
+    - platform: mqtt
+      state_topic: "binary_sensor/window_close_bedroom"
+      name: "mqtt_binary_sensor_window_close_bedroom"
+
+    - platform: template
+      sensors:
+        window_close_bedroom:
+          friendly_name: "Окно в спальне было закрыто"
+          icon_template: mdi:window-closed
+          value_template: >-
+            {% set uptime = as_timestamp(now()) - as_timestamp(states.sensor.mqtt_binary_sensor_window_close_bedroom.state) | int %}
+            {% set minutes = ((uptime % 3600) / 60) | int %}
+            {% set hours = ((uptime % 86400) / 3600) | int %}
+            {% set days = (uptime / 86400) | int %}
+              {% if uptime > 1 %}
+                {% if days > 0 %} {{ days }} д. {% endif %}
+                {% if hours > 0 %} {{ hours }} ч. {% endif %}
+                {% if minutes > 0 %} {{ minutes }} мин. назад {% else %} 1 мин. назад {% endif %}
+              {% else %}
+                1 мин. назад
+              {% endif %}
+
+  automation:
+    - id: window_close_time_bedroom
+      alias: Запись последнего открытия окна в спальне
+      initial_state: true
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.window_bedroom
+          from: "on"
+          to: "off"
+      action:
+        - service: mqtt.publish
+          data_template:
+            topic: "binary_sensor/window_close_bedroom"
+            payload: "{{ states('sensor.date_time_iso') }}"
+            retain: true

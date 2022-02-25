@@ -1,0 +1,132 @@
+title: Главная
+icon: mdi:home-assistant
+cards:
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Состояние
+
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.motion_detected_home
+            name: Движение
+          - entity: sensor.door_lock_detected_hallway
+            name: Входная дверь
+          - entity: sensor.window_close_bedroom
+            name: Окно в спальне
+          - entity: sensor.window_close_workroom
+            name: Окно в кабинете
+
+      - type: glance
+        entities:
+          - entity: binary_sensor.windows
+            name: Окна
+            state_color: true
+            show_state: false
+          - entity: binary_sensor.door_hallway
+            name: Дверь
+            state_color: true
+            show_state: false
+          - entity: binary_sensor.motion_home
+            name: Движение
+            state_color: true
+            show_state: false
+
+      - type: entities
+        entities:
+          - entity: binary_sensor.motion_home
+            type: custom:multiple-entity-row
+            name: Дом
+            state_header: Статус
+            state_color: true
+            show_state: false
+            entities:
+              - entity: input_boolean.guests_motion_state
+                name: Гости
+                toggle: true
+              - entity: input_boolean.home_motion_state
+                name: Автоматизация
+                toggle: true
+
+      - type: horizontal-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Температура
+            line_width: 3
+            entities:
+              - entity: sensor.temperature_home
+                show_state: true
+            show:
+              extrema: true
+              labels: false
+            line_color: "#fe4a49"
+
+          - type: custom:mini-graph-card
+            name: Влажность
+            line_width: 3
+            entities:
+              - entity: sensor.humidity_home
+                show_state: true
+            show:
+              extrema: true
+              labels: false
+            line_color: "#2ab7ca"
+
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Система
+
+      - type: custom:mini-graph-card
+        name: Интернет
+        line_width: 3
+        entities:
+          - entity: sensor.internet_speed
+            show_state: true
+        show:
+          extrema: true
+          labels: false
+        line_color: "#2ab7ca"
+
+      - type: entities
+        show_header_toggle: false
+        entities:
+          # - entity: sensor.snapshots_in_ha
+          #   name: Копий локально
+          - entity: sensor.snapshots_in_google_drive
+            name: Копий на диске
+          - entity: sensor.last_google_backup
+            name: Последняя копия
+
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.maria_db_size
+            name: Объем Maria DB
+            icon: mdi:database-outline
+          - entity: sensor.ha_last_boot
+            name: Онлайн
+          - entity: sensor.system_last_boot
+            name: Перезагрузка
+
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: Загрузка CPU
+            unit: "%"
+            entity: sensor.processor_use
+            severity:
+              green: 0
+              yellow: 60
+              red: 85
+          - type: gauge
+            name: Загрузка ОЗУ
+            unit: "%"
+            entity: sensor.memory_use_percent
+            severity:
+              green: 0
+              yellow: 60
+              red: 85

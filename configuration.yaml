@@ -1,0 +1,78 @@
+homeassistant:
+  name: Staboss Smart Home
+  latitude: !secret latitude_coord
+  longitude: !secret longitude_coord
+  elevation: 60
+  unit_system: metric
+  time_zone: Europe/Moscow
+  customize: !include_dir_merge_named includes/customize
+  packages: !include_dir_merge_named includes/packages
+
+# Отображение панели настроек в интерфейсе
+config:
+# Сканирование доступных устройств в сети
+ssdp:
+# Включение официального интерфейса
+frontend:
+  themes: !include_dir_merge_named themes
+# Включение карты
+map:
+# Включение поддержки приложения
+mobile_app:
+# Отслеживание солнца
+sun:
+# API для предоставления информации о системе и ее компонентах
+system_health:
+# Сенсор для отображения последней версии НА
+updater:
+# Потоковое изображение с камер
+stream:
+# Включение истории
+history:
+# Включение журнала
+logbook:
+
+# Logs
+logger:
+  default: info
+  logs:
+    libav.rtsp: critical
+
+# Lovelace
+lovelace:
+  mode: yaml
+  resources:
+    - url: /hacsfiles/battery-state-card/battery-state-card.js
+      type: module
+    - url: /hacsfiles/weather-card/weather-card.js
+      type: module
+    - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
+      type: module
+    - url: /hacsfiles/vertical-stack-in-card/vertical-stack-in-card.js
+      type: module
+    - url: /hacsfiles/light-entity-card/light-entity-card.js
+      type: module
+    - url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js
+      type: module
+    - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
+      type: module
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# External files
+recorder: !include includes/recorder.yaml
+
+# External folders
+sensor: !include_dir_merge_list includes/sensors
+binary_sensor: !include_dir_merge_list includes/bin_sensors
+
+yandex_smart_home:
+  filter:
+    include_domains:
+      - switch
+    include_entity_globs:
+      - sensor.illuminance_*
+      - sensor.temperature_*
+      - sensor.humidity_*

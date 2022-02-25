@@ -1,0 +1,32 @@
+- platform: template
+  sensors:
+    # Влажность в кабинете
+    humidity_workroom:
+      friendly_name: "Влажность в кабинете"
+      device_class: humidity
+      value_template: >-
+        {{ state_attr('sensor.aqara_temperature_workroom_1_humidity', 'humidity') }}
+    # Влажность на кухне
+    humidity_kitchen:
+      friendly_name: "Влажность на кухне"
+      device_class: humidity
+      value_template: >-
+        {{ state_attr('sensor.aqara_temperature_kitchen_1_humidity', 'humidity') }}
+    # Влажность в ванной
+    humidity_bathroom:
+      friendly_name: "Влажность в ванной"
+      device_class: humidity
+      value_template: >-
+        {{ state_attr('sensor.aqara_temperature_bathroom_1_humidity', 'humidity') }}
+    # Влажность в спальне
+    humidity_bedroom:
+      friendly_name: "Влажность в спальне"
+      device_class: humidity
+      value_template: >-
+        {{ state_attr('sensor.aqara_temperature_bedroom_1_humidity', 'humidity') }}
+    # Влажность дома
+    humidity_home:
+      friendly_name: "Влажность дома"
+      device_class: humidity
+      value_template: >-
+        {{ ((state_attr('sensor.aqara_temperature_bedroom_1_humidity', 'humidity') + state_attr('sensor.aqara_temperature_kitchen_1_humidity', 'humidity') + state_attr('sensor.aqara_temperature_workroom_1_humidity', 'humidity')) / 3) | float | round(2) }}

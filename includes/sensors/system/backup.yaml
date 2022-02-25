@@ -1,0 +1,31 @@
+- platform: template
+  sensors:
+    last_google_backup:
+      friendly_name: "Последний удачный бэкап"
+      value_template: >-
+        {% if state_attr("sensor.backup_state", "last_backup") %}
+          {{ as_timestamp(state_attr("sensor.backup_state", "last_backup")) | timestamp_custom('%d.%m.%Y %H:%M', True) }}
+        {% else %} 
+          Получение данных...
+        {% endif %}
+      icon_template: mdi:calendar-check-outline
+
+    snapshots_in_google_drive:
+      friendly_name: "Снапшотов на Googe Drive"
+      value_template: >-
+        {% if state_attr("sensor.backup_state", "backups_in_google_drive") %}
+          {{ state_attr("sensor.backup_state", "backups_in_google_drive") }}
+        {% else %} 
+          Получение данных...         
+        {% endif %}
+      icon_template: mdi:google-drive
+
+    snapshots_in_ha:
+      friendly_name: "Снапшотов локально"
+      value_template: >-
+        {% if state_attr("sensor.backup_state", "backups_in_home_assistant") %}
+          {{ state_attr("sensor.backup_state", "backups_in_home_assistant") }}
+        {% else %} 
+          Получение данных...          
+        {% endif %}
+      icon_template: mdi:home-assistant

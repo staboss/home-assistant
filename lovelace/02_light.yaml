@@ -1,0 +1,49 @@
+title: Освещение
+icon: mdi:lightbulb-group
+cards:
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: >
+          ## Освещение
+
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: switch.tuya_switch_single_kitchen
+            name: Кухня
+          - type: entity-button
+            entity: switch.tuya_switch_single_workroom
+            name: Кабинет
+          - type: entity-button
+            entity: switch.tuya_switch_double_hallway_right
+            name: Прихожая
+
+      - type: horizontal-stack
+        cards:
+          - type: entity-button
+            entity: switch.tuya_switch_double_passage_right
+            name: Коридор
+          - type: entity-button
+            entity: switch.tuya_switch_double_passage_left
+            name: Ванная
+            icon: mdi:light-recessed
+          - type: entity-button
+            entity: switch.tuya_switch_double_hallway_left
+            name: Кладовка
+
+      - type: horizontal-stack
+        cards:
+          - type: light
+            entity: light.aqara_buld_workroom_table
+            name: Кабинет лампа
+
+      - type: glance
+        columns: 3
+        entities:
+          - entity: sensor.illuminance_workroom
+            name: Кабинет
+          - entity: sensor.illuminance_bedroom
+            name: Спальня
+          - entity: sensor.illuminance_kitchen
+            name: Кухня

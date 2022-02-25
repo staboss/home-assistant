@@ -1,0 +1,23 @@
+switch.tuya_switch_single_kitchen:
+  friendly_name: Свет на кухне
+  icon: mdi:ceiling-light
+
+switch.tuya_switch_single_workroom:
+  friendly_name: Свет в кабинете
+  icon: mdi:chandelier
+
+switch.tuya_switch_double_hallway_left:
+  friendly_name: Свет в кладовке
+  icon: mdi:ceiling-light
+
+switch.tuya_switch_double_passage_right:
+  friendly_name: Свет в коридоре
+  icon: mdi:ceiling-light
+
+switch.tuya_switch_double_hallway_right:
+  friendly_name: Свет в прихожей
+  icon: mdi:ceiling-light
+
+switch.tuya_switch_double_passage_left:
+  friendly_name: Свет в ванной
+  icon: mdi:light-recessed

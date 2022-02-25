@@ -1,0 +1,20 @@
+- platform: template
+  sensors:
+    # Освещение в кабинете
+    illuminance_workroom:
+      friendly_name: "Освещение в кабинете"
+      device_class: illuminance
+      value_template: >-
+        {{ state_attr('sensor.mijia_light_workroom_1_illuminance_lux', 'illuminance_lux') }}
+    # Освещение на кухне
+    illuminance_kitchen:
+      friendly_name: "Освещение на кухне"
+      device_class: illuminance
+      value_template: >-
+        {{ state_attr('sensor.mijia_light_kitchen_1_illuminance_lux', 'illuminance_lux') }}
+    # Освещение в спальне
+    illuminance_bedroom:
+      friendly_name: "Освещение в спальне"
+      device_class: illuminance
+      value_template: >-
+        {{ state_attr('sensor.mijia_light_bedroom_1_illuminance_lux', 'illuminance_lux') }}
