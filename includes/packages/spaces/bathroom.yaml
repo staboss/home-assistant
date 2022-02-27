@@ -6,7 +6,7 @@ bathroom:
 
   input_number:
     bathroom_humidity_min:
-      name: Мин. влажность
+      name: Влажность (%)
       min: 0
       max: 100
       step: 5
@@ -49,31 +49,22 @@ bathroom:
 
         bathroom_motion_humidity_min:
           value_template: >
-            {{ is_state('binary_sensor.bathroom_motion_status', 'on') and is_state('binary_sensor.bathroom_humidity_min', 'on') }}
+            {{ is_state('binary_sensor.bathroom_motion_status', 'on') or is_state('binary_sensor.bathroom_humidity_min', 'on') }}
           device_class: motion
 
   automation:
-    - id: bathroom_automation_light
-      alias: Свет в ванной
-      use_blueprint:
-        path: motion_switch.yaml
-        input:
-          motion_entity: binary_sensor.bathroom_motion_status
-          switch_entity: switch.tuya_switch_double_passage_left
-          turn_off_no_motion: 300
-          turn_off_wait: 300
-
-    - id: bathroom_automation_light_humidity
-      alias: Свет в ванной (влажность)
+    - id: Свет в ванной
+      alias: bathroom_automation_light
       use_blueprint:
         path: motion_switch.yaml
         input:
           motion_entity: binary_sensor.bathroom_motion_humidity_min
           switch_entity: switch.tuya_switch_double_passage_left
           turn_off_no_motion: 300
+          turn_off_wait: 300
 
-    - id: motion_time_bathroom
-      alias: Запись последнего движения в ванной
+    - id: Запись последнего движения в ванной
+      alias: motion_time_bathroom
       initial_state: true
       trigger:
         - platform: state

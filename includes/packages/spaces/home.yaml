@@ -54,8 +54,8 @@ home:
           device_class: motion
 
   automation:
-    - id: home_light_off
-      alias: Выключение освещения в доме
+    - id: Выключение освещения в доме
+      alias: home_light_off
       initial_state: true
       trigger:
         - platform: state
@@ -71,8 +71,8 @@ home:
             - switch.tuya_switch_double_passage_left
             - switch.tuya_switch_double_passage_right
 
-    - id: home_light_on
-      alias: Включение основного освещения в доме
+    - id: Включение основного освещения в доме
+      alias: home_light_on
       initial_state: true
       trigger:
         - platform: state
@@ -85,8 +85,8 @@ home:
             - switch.tuya_switch_double_passage_left
             - switch.tuya_switch_double_hallway_right
 
-    - id: motion_time_home
-      alias: Запись последнего движения в доме
+    - id: Запись последнего движения в доме
+      alias: motion_time_home
       initial_state: true
       trigger:
         - platform: state

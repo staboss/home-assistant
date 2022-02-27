@@ -59,8 +59,8 @@ hallway:
           device_class: motion
 
   automation:
-    - id: hallway_automation_light
-      alias: Свет в прихожей
+    - id: Свет в прихожей
+      alias: hallway_automation_light
       use_blueprint:
         path: motion_switch.yaml
         input:
@@ -69,8 +69,8 @@ hallway:
           turn_off_no_motion: 75
           turn_off_wait: 75
 
-    - id: motion_time_hallway
-      alias: Запись последнего движения в прихожей
+    - id: Запись последнего движения в прихожей
+      alias: motion_time_hallway
       initial_state: true
       trigger:
         - platform: state
@@ -82,9 +82,9 @@ hallway:
             topic: "binary_sensor/motion_hallway"
             payload: "{{ states('sensor.date_time_iso') }}"
             retain: true
-    
-    - id: door_close_time_hallway
-      alias: Запись последнего закрытия двери
+
+    - id: Запись последнего закрытия двери
+      alias: door_close_time_hallway
       initial_state: true
       trigger:
         - platform: state

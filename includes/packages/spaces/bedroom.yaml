@@ -23,8 +23,8 @@ bedroom:
               {% endif %}
 
   automation:
-    - id: window_close_time_bedroom
-      alias: Запись последнего открытия окна в спальне
+    - id: Запись последнего открытия окна в спальне
+      alias: window_close_time_bedroom
       initial_state: true
       trigger:
         - platform: state

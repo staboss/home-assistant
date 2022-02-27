@@ -6,7 +6,7 @@ kitchen:
 
   input_number:
     kitchen_illuminance_lux:
-      name: Мин. освещенность
+      name: Освещенность (lux)
       min: 0
       max: 100
       step: 5
@@ -53,18 +53,18 @@ kitchen:
           device_class: motion
 
   automation:
-    - id: kitchen_automation_light
-      alias: Свет на кухне
+    - id: Свет на кухне
+      alias: kitchen_automation_light
       use_blueprint:
         path: motion_switch.yaml
         input:
           motion_entity: binary_sensor.kitchen_motion_low_light
           switch_entity: switch.tuya_switch_single_kitchen
-          turn_off_no_motion: 420
+          turn_off_no_motion: 300
           turn_off_wait: 300
 
-    - id: motion_time_kitchen
-      alias: Запись последнего движения на кухне
+    - id: Запись последнего движения на кухне
+      alias: motion_time_kitchen
       initial_state: true
       trigger:
         - platform: state

@@ -16,7 +16,6 @@ blueprint:
       description: Конечное устройство для переключения
       selector:
         entity:
-          domain: switch
 
     turn_off_wait:
       name: Таймер выключения

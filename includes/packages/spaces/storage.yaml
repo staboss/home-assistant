@@ -37,8 +37,8 @@ storage:
           device_class: motion
 
   automation:
-    - id: storage_automation_light
-      alias: Свет в кладовке
+    - id: Свет в кладовке
+      alias: storage_automation_light
       use_blueprint:
         path: motion_switch.yaml
         input:
@@ -47,8 +47,8 @@ storage:
           turn_off_no_motion: 60
           turn_off_wait: 60
 
-    - id: motion_time_storage
-      alias: Запись последнего движения в кладовке
+    - id: Запись последнего движения в кладовке
+      alias: motion_time_storage
       initial_state: true
       trigger:
         - platform: state

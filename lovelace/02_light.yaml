@@ -35,7 +35,7 @@ cards:
       - type: horizontal-stack
         cards:
           - type: light
-            entity: light.aqara_buld_workroom_table
+            entity: light.aqara_bulb_workroom_table
             name: Кабинет лампа
 
       - type: glance

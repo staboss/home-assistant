@@ -6,7 +6,7 @@ workroom:
 
   input_number:
     workroom_illuminance_lux:
-      name: Мин. освещенность
+      name: Освещенность (lux)
       min: 0
       max: 100
       step: 5
@@ -65,6 +65,11 @@ workroom:
             {{ is_state('binary_sensor.home_motion_status', 'on') and is_state('input_boolean.workroom_motion_state', 'on') and is_state('binary_sensor.motion_workroom', 'on') }}
           device_class: motion
 
+        workroom_motion_status_night:
+          value_template: >
+            {{ is_state('binary_sensor.workroom_motion_status', 'on') and is_state('binary_sensor.workroom_time', 'on') }}
+          device_class: motion
+
         workroom_illuminance_low:
           value_template: >
             {{ states('sensor.illuminance_workroom') | int < states('input_number.workroom_illuminance_lux') | int }}
@@ -74,34 +79,29 @@ workroom:
             {{ is_state('binary_sensor.workroom_motion_status', 'on') and is_state('binary_sensor.workroom_illuminance_low', 'on') and is_state('binary_sensor.weekday_time', 'on') }}
           device_class: motion
 
-        workroom_motion_night:
-          value_template: >
-            {{ is_state('binary_sensor.home_motion_status', 'on') and is_state('binary_sensor.motion_workroom', 'on') }}
-          device_class: motion
-
   automation:
-    - id: workroom_automation_light
-      alias: Свет в кабинете
+    - id: Свет в кабинете
+      alias: workroom_automation_light
       use_blueprint:
         path: motion_switch.yaml
         input:
           motion_entity: binary_sensor.workroom_motion_low_light
           switch_entity: switch.tuya_switch_single_workroom
-          turn_off_no_motion: 420
+          turn_off_no_motion: 300
           turn_off_wait: 300
 
-    - id: workroom_automation_light_night
-      alias: Свет в кабинете
+    - id: Свет в кабинете (лампа)
+      alias: workroom_automation_light_night
       use_blueprint:
         path: motion_switch.yaml
         input:
-          motion_entity: binary_sensor.workroom_motion_night
-          switch_entity: light.aqara_buld_workroom_table
-          turn_off_no_motion: 420
+          motion_entity: binary_sensor.workroom_motion_status_night
+          light_entity: light.aqara_bulb_workroom_table
+          turn_off_no_motion: 300
           turn_off_wait: 300
 
-    - id: motion_time_workroom
-      alias: Запись последнего движения в кабинете
+    - id: Запись последнего движения в кабинете
+      alias: motion_time_workroom
       initial_state: true
       trigger:
         - platform: state
@@ -114,8 +114,8 @@ workroom:
             payload: "{{ states('sensor.date_time_iso') }}"
             retain: true
 
-    - id: window_close_time_workroom
-      alias: Запись последнего открытия окна в кабинете
+    - id: Запись последнего открытия окна в кабинете
+      alias: window_close_time_workroom
       initial_state: true
       trigger:
         - platform: state
