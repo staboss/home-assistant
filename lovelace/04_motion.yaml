@@ -32,13 +32,17 @@ cards:
             state_color: true
             show_state: false
             entities:
-              - entity: sensor.motion_detected_workroom
-                name: Движение было
+              - entity: sensor.illuminance_workroom
+                name: Освещение
+              - entity: switch.tuya_switch_single_workroom
+                name: Свет
+                toggle: true
               - entity: input_boolean.workroom_motion_state
                 name: Автоматизация
                 toggle: true
           - type: divider
           - entity: input_number.workroom_illuminance_lux
+            name: Освещенность
 
       - type: entities
         entities:
@@ -49,13 +53,17 @@ cards:
             state_color: true
             show_state: false
             entities:
-              - entity: sensor.motion_detected_kitchen
-                name: Движение было
+              - entity: sensor.illuminance_kitchen
+                name: Освещение
+              - entity: switch.tuya_switch_single_kitchen
+                name: Свет
+                toggle: true
               - entity: input_boolean.kitchen_motion_state
                 name: Автоматизация
                 toggle: true
           - type: divider
           - entity: input_number.kitchen_illuminance_lux
+            name: Освещенность
 
       - type: entities
         entities:
@@ -66,13 +74,17 @@ cards:
             state_color: true
             show_state: false
             entities:
-              - entity: sensor.motion_detected_bathroom
-                name: Движение было
+              - entity: sensor.humidity_bathroom
+                name: Влажность
+              - entity: switch.tuya_switch_double_passage_left
+                name: Свет
+                toggle: true
               - entity: input_boolean.bathroom_motion_state
                 name: Автоматизация
                 toggle: true
           - type: divider
           - entity: input_number.bathroom_humidity_min
+            name: Влажность
 
       - type: entities
         entities:
@@ -83,8 +95,9 @@ cards:
             state_color: true
             show_state: false
             entities:
-              - entity: sensor.motion_detected_hallway
-                name: Движение было
+              - entity: switch.tuya_switch_double_hallway_right
+                name: Свет
+                toggle: true
               - entity: input_boolean.hallway_motion_state
                 name: Автоматизация
                 toggle: true
@@ -98,8 +111,9 @@ cards:
             state_color: true
             show_state: false
             entities:
-              - entity: sensor.motion_detected_storage
-                name: Движение было
+              - entity: switch.tuya_switch_double_hallway_left
+                name: Свет
+                toggle: true
               - entity: input_boolean.storage_motion_state
                 name: Автоматизация
                 toggle: true

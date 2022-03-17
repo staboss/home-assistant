@@ -36,7 +36,10 @@ cards:
         cards:
           - type: light
             entity: light.aqara_bulb_workroom_table
-            name: Кабинет лампа
+            name: Кабинет
+          - type: light
+            entity: light.aqara_bulb_bedroom_table
+            name: Спальня
 
       - type: glance
         columns: 3

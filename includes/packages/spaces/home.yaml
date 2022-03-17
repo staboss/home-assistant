@@ -26,10 +26,9 @@ home:
               {% if uptime > 1 %}
                 {% if days > 0 %} {{ days }} д. {% endif %}
                 {% if hours > 0 %} {{ hours }} ч. {% endif %}
-                {% if minutes > 0 and days > 0 %} {{ minutes }} м. {% else %}
-                {% if minutes > 0 and days == 0 %} {{ minutes }} мин. {% else %} 1 мин. {% endif %} {% endif %}
+                {% if minutes > 0 %} {{ minutes }} мин. назад {% else %} 1 мин. назад {% endif %}
               {% else %}
-                1 мин.
+                1 мин. назад
               {% endif %}
 
   binary_sensor:
@@ -70,6 +69,9 @@ home:
             - switch.tuya_switch_double_hallway_right
             - switch.tuya_switch_double_passage_left
             - switch.tuya_switch_double_passage_right
+        - service: light.turn_off
+          entity_id:
+            - light.aqara_bulb_workroom_table
 
     - id: Включение основного освещения в доме
       alias: home_light_on

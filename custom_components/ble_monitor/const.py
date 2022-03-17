@@ -111,12 +111,11 @@ CONF_TMAX_PROBES = 300.0
 CONF_HMIN = 0.0
 CONF_HMAX = 99.9
 
-# Beacon types
-
 
 # Sensors with deviating temperature range
 KETTLES = ('YM-K1501', 'YM-K1501EU', 'V-SK152')
 PROBES = ('iBBQ-2', 'iBBQ-4', 'H5183')
+
 
 # Sensor entity description
 @dataclass
@@ -125,6 +124,7 @@ class BLEMonitorRequiredKeysMixin:
 
     sensor_class: str
     unique_id: str
+
 
 @dataclass
 class BLEMonitorSensorEntityDescription(
@@ -343,6 +343,15 @@ SENSOR_TYPES: tuple[BLEMonitorSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
     ),
     BLEMonitorSensorEntityDescription(
+        key="temperature calibrated",
+        sensor_class="TemperatureSensor",
+        name="ble temperature calibrated",
+        unique_id="t_calibrated_",
+        native_unit_of_measurement=TEMP_CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    BLEMonitorSensorEntityDescription(
         key="humidity",
         sensor_class="HumiditySensor",
         name="ble humidity",
@@ -467,6 +476,52 @@ SENSOR_TYPES: tuple[BLEMonitorSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
     BLEMonitorSensorEntityDescription(
+        key="co2",
+        sensor_class="MeasuringSensor",
+        name="CO2",
+        unique_id="co2_",
+        icon="mdi:molecule-co2",
+        native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION,
+        device_class=SensorDeviceClass.CO2,
+    ),
+    BLEMonitorSensorEntityDescription(
+        key="pm2.5",
+        sensor_class="MeasuringSensor",
+        name="PM2.5",
+        unique_id="pm25_",
+        icon="mdi:molecule",
+        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        device_class=SensorDeviceClass.PM25,
+    ),
+    BLEMonitorSensorEntityDescription(
+        key="pm10",
+        sensor_class="MeasuringSensor",
+        name="PM10",
+        unique_id="pm10_",
+        icon="mdi:molecule",
+        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        device_class=SensorDeviceClass.PM10,
+    ),
+    BLEMonitorSensorEntityDescription(
+        key="tvoc",
+        sensor_class="MeasuringSensor",
+        name="TVOC",
+        unique_id="ble_tvoc_",
+        icon="mdi:molecule",
+        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
+        device_class=SensorDeviceClass.VOLATILE_ORGANIC_COMPOUNDS,
+    ),
+    BLEMonitorSensorEntityDescription(
+        key="aqi",
+        sensor_class="MeasuringSensor",
+        name="Air Quality Index",
+        unique_id="ble_iaq_",
+        icon="mdi:molecule",
+        native_unit_of_measurement=None,
+        device_class=None,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    BLEMonitorSensorEntityDescription(
         key="mac",
         sensor_class="StateChangedSensor",
         name="ble mac",
@@ -509,6 +564,26 @@ SENSOR_TYPES: tuple[BLEMonitorSensorEntityDescription, ...] = (
         device_class=None,
         state_class=None,
         entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    BLEMonitorSensorEntityDescription(
+        key="count",
+        sensor_class="StateChangedSensor",
+        name="ble count",
+        unique_id="cnt_",
+        icon="mdi:counter",
+        native_unit_of_measurement=None,
+        device_class=None,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    BLEMonitorSensorEntityDescription(
+        key="air quality",
+        sensor_class="StateChangedSensor",
+        name="Air Quality",
+        unique_id="ble_aq_",
+        icon="mdi:molecule",
+        native_unit_of_measurement=None,
+        device_class=None,
+        state_class=None,
     ),
     BLEMonitorSensorEntityDescription(
         key="consumable",
@@ -738,33 +813,6 @@ SENSOR_TYPES: tuple[BLEMonitorSensorEntityDescription, ...] = (
         device_class=None,
         state_class=SensorStateClass.MEASUREMENT,
     ),
-    BLEMonitorSensorEntityDescription(
-        key="co2",
-        sensor_class="MeasuringSensor",
-        name="co2 sensor",
-        unique_id="co2_",
-        icon="mdi:molecule-co2",
-        native_unit_of_measurement=CONCENTRATION_PARTS_PER_MILLION,
-        device_class=SensorDeviceClass.CO2,
-    ),
-    BLEMonitorSensorEntityDescription(
-        key="pm2.5",
-        sensor_class="MeasuringSensor",
-        name="PM2.5 sensor",
-        unique_id="pm25_",
-        icon="mdi:molecule-co2",
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
-        device_class=SensorDeviceClass.PM25,
-    ),
-    BLEMonitorSensorEntityDescription(
-        key="pm10",
-        sensor_class="MeasuringSensor",
-        name="PM10 sensor",
-        unique_id="pm10_",
-        icon="mdi:molecule-co2",
-        native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
-        device_class=SensorDeviceClass.PM10,
-    ),
 )
 
 
@@ -830,7 +878,7 @@ MEASUREMENT_DICT = {
     'T201'                    : [["temperature", "humidity", "battery", "voltage", "rssi"], [], []],
     'H5072/H5075'             : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5101/H5102/H5177'       : [["temperature", "humidity", "battery", "rssi"], [], []],
-    'H5051'                   : [["temperature", "humidity", "battery", "rssi"], [], []],
+    'H5051/H5071'             : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5074'                   : [["temperature", "humidity", "battery", "rssi"], [], []],
     'H5178'                   : [["temperature", "temperature outdoor", "humidity", "humidity outdoor", "battery", "rssi"], [], []],
     'H5179'                   : [["temperature", "humidity", "battery", "rssi"], [], []],
@@ -863,13 +911,16 @@ MEASUREMENT_DICT = {
     'iBBQ-4'                  : [["temperature probe 1", "temperature probe 2", "temperature probe 3", "temperature probe 4", "rssi"], [], []],
     'iBBQ-6'                  : [["temperature probe 1", "temperature probe 2", "temperature probe 3", "temperature probe 4", "temperature probe 5", "temperature probe 6", "rssi"], [], []],
     'IBS-TH'                  : [["temperature", "humidity", "battery", "rssi"], [], []],
+    'IBS-TH2 (T only)'        : [["temperature", "battery", "rssi"], [], []],
     'BEC07-5'                 : [["temperature", "humidity", "rssi"], [], []],
     'iBeacon'                 : [["rssi", "measured power", "cypress temperature", "cypress humidity"], ["uuid", "mac", "major", "minor"], []],  # mac can be dynamic
     'AltBeacon'               : [["rssi", "measured power"], ["uuid", "mac", "major", "minor"], []],  # mac can be dynamic
     'MyCO2'                   : [["temperature", "humidity", "co2", "rssi"], [], []],
     'HA BLE DIY'              : [["temperature", "rssi"], [], []],
+    'EClerk Eco'              : [["temperature", "humidity", "co2", "battery", "rssi"], [], []],
+    'Air Mentor Pro 2'        : [["temperature", "temperature calibrated", "humidity", "co2", "tvoc", "aqi", "air quality", "pm2.5", "pm10", "rssi"], [], []],
+    'Meter TH S1'             : [["temperature", "humidity", "battery", "rssi"], [], []],
 }
-
 
 # Sensor manufacturer dictionary
 MANUFACTURER_DICT = {
@@ -929,7 +980,7 @@ MANUFACTURER_DICT = {
     'T201'                    : 'Brifit',
     'H5072/H5075'             : 'Govee',
     'H5101/H5102/H5177'       : 'Govee',
-    'H5051'                   : 'Govee',
+    'H5051/H5071'             : 'Govee',
     'H5074'                   : 'Govee',
     'H5178'                   : 'Govee',
     'H5179'                   : 'Govee',
@@ -963,21 +1014,27 @@ MANUFACTURER_DICT = {
     'iBBQ-4'                  : 'Inkbird',
     'iBBQ-6'                  : 'Inkbird',
     'IBS-TH'                  : 'Inkbird',
+    'IBS-TH2 (T only)'        : 'Inkbird',
     'BEC07-5'                 : 'Jinou',
     'iBeacon'                 : 'Apple',
     'AltBeacon'               : 'Radius Networks',
     'HA BLE DIY'              : 'Home Assistant DIY',
+    'EClerk Eco'              : 'Relsib',
+    'Air Mentor Pro 2'        : 'Air Mentor',
+    'Meter TH S1'             : 'Switchbot',
 }
 
 # Renamed model dictionary
 RENAMED_MODEL_DICT = {
     'H5051/H5074': 'H5074',
+    'H5051': 'H5051/H5071',
     'IBS-TH2': 'IBS-TH',
 }
 
 # Selection list for report_uknown
 REPORT_UNKNOWN_LIST = [
     "Off",
+    "Air Mentor"
     "ATC",
     "BlueMaestro",
     "Brifit",
@@ -992,10 +1049,12 @@ REPORT_UNKNOWN_LIST = [
     "Moat",
     "Oral-B",
     "Qingping",
+    "Relsib",
     "rbaron",
     "Ruuvitag",
     "Sensirion",
     "SensorPush",
+    "Switchbot",
     "Teltonika",
     "Thermoplus",
     "Xiaogui",

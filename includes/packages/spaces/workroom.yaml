@@ -7,37 +7,14 @@ workroom:
   input_number:
     workroom_illuminance_lux:
       name: Освещенность (lux)
-      min: 0
-      max: 100
+      min: 50
+      max: 150
       step: 5
 
   sensor:
     - platform: mqtt
-      state_topic: "binary_sensor/motion_workroom"
-      name: "mqtt_binary_sensor_motion_workroom"
-
-    - platform: mqtt
       state_topic: "binary_sensor/window_close_workroom"
       name: "mqtt_binary_sensor_window_close_workroom"
-
-    - platform: template
-      sensors:
-        motion_detected_workroom:
-          friendly_name: "Движение в кабинете было"
-          icon_template: mdi:run-fast
-          value_template: >-
-            {% set uptime = as_timestamp(now()) - as_timestamp(states.sensor.mqtt_binary_sensor_motion_workroom.state) | int %}
-            {% set minutes = ((uptime % 3600) / 60) | int %}
-            {% set hours = ((uptime % 86400) / 3600) | int %}
-            {% set days = (uptime / 86400) | int %}
-              {% if uptime > 1 %}
-                {% if days > 0 %} {{ days }} д. {% endif %}
-                {% if hours > 0 %} {{ hours }} ч. {% endif %}
-                {% if minutes > 0 and days > 0 %} {{ minutes }} м. {% else %}
-                {% if minutes > 0 and days == 0 %} {{ minutes }} мин. {% else %} 1 мин. {% endif %} {% endif %}
-              {% else %}
-                1 мин.
-              {% endif %}
 
     - platform: template
       sensors:
@@ -79,41 +56,76 @@ workroom:
             {{ is_state('binary_sensor.workroom_motion_status', 'on') and is_state('binary_sensor.workroom_illuminance_low', 'on') and is_state('binary_sensor.weekday_time', 'on') }}
           device_class: motion
 
+        workroom_light_status:
+          value_template: >
+            {{ is_state('binary_sensor.workroom_motion_status', 'off') and is_state('switch.tuya_switch_single_workroom', 'on') }}
+
+        workroom_bulb_status:
+          value_template: >
+            {{ is_state('binary_sensor.workroom_motion_status', 'off') and is_state('light.aqara_bulb_workroom_table', 'on') }}
+
   automation:
-    - id: Свет в кабинете
-      alias: workroom_automation_light
-      use_blueprint:
-        path: motion_switch.yaml
-        input:
-          motion_entity: binary_sensor.workroom_motion_low_light
-          switch_entity: switch.tuya_switch_single_workroom
-          turn_off_no_motion: 300
-          turn_off_wait: 300
-
-    - id: Свет в кабинете (лампа)
-      alias: workroom_automation_light_night
-      use_blueprint:
-        path: motion_switch.yaml
-        input:
-          motion_entity: binary_sensor.workroom_motion_status_night
-          light_entity: light.aqara_bulb_workroom_table
-          turn_off_no_motion: 300
-          turn_off_wait: 300
-
-    - id: Запись последнего движения в кабинете
-      alias: motion_time_workroom
+    ##### ОСВЕЩЕНИЕ ########################################################
+    - id: Включение освещения в кабинете
+      alias: workroom_light_on
       initial_state: true
       trigger:
         - platform: state
-          entity_id: binary_sensor.motion_workroom
+          entity_id: binary_sensor.workroom_motion_low_light
           to: "on"
+      condition:
+        - condition: state
+          entity_id: switch.tuya_switch_single_workroom
+          state: "off"
       action:
-        - service: mqtt.publish
-          data_template:
-            topic: "binary_sensor/motion_workroom"
-            payload: "{{ states('sensor.date_time_iso') }}"
-            retain: true
+        - service: switch.turn_on
+          entity_id:
+            - switch.tuya_switch_single_workroom
 
+    - id: Выключение освещения в кабинете
+      alias: workroom_light_off
+      initial_state: true
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.workroom_light_status
+          to: "on"
+          for: "00:05:00"
+      action:
+        - service: switch.turn_off
+          entity_id:
+            - switch.tuya_switch_single_workroom
+
+    ##### ЛАМПА ############################################################
+    - id: Включение лампы в кабинете
+      alias: workroom_bulb_light_on
+      initial_state: true
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.workroom_motion_status_night
+          to: "on"
+      condition:
+        - condition: state
+          entity_id: light.aqara_bulb_workroom_table
+          state: "off"
+      action:
+        - service: light.turn_on
+          entity_id:
+            - light.aqara_bulb_workroom_table
+
+    - id: Выключение лампы в кабинете
+      alias: workroom_bulb_light_off
+      initial_state: true
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.workroom_bulb_status
+          to: "on"
+          for: "00:05:00"
+      action:
+        - service: light.turn_off
+          entity_id:
+            - light.aqara_bulb_workroom_table
+
+    ##### ЗАПИСИ ###########################################################
     - id: Запись последнего открытия окна в кабинете
       alias: window_close_time_workroom
       initial_state: true

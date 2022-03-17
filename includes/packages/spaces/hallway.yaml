@@ -6,31 +6,8 @@ hallway:
 
   sensor:
     - platform: mqtt
-      state_topic: "binary_sensor/motion_hallway"
-      name: "mqtt_binary_sensor_motion_hallway"
-
-    - platform: mqtt
       state_topic: "binary_sensor/door_lock_hallway"
       name: "mqtt_binary_sensor_door_lock_hallway"
-
-    - platform: template
-      sensors:
-        motion_detected_hallway:
-          friendly_name: "Движение в прихожей было"
-          icon_template: mdi:run-fast
-          value_template: >-
-            {% set uptime = as_timestamp(now()) - as_timestamp(states.sensor.mqtt_binary_sensor_motion_hallway.state) | int %}
-            {% set minutes = ((uptime % 3600) / 60) | int %}
-            {% set hours = ((uptime % 86400) / 3600) | int %}
-            {% set days = (uptime / 86400) | int %}
-              {% if uptime > 1 %}
-                {% if days > 0 %} {{ days }} д. {% endif %}
-                {% if hours > 0 %} {{ hours }} ч. {% endif %}
-                {% if minutes > 0 and days > 0 %} {{ minutes }} м. {% else %}
-                {% if minutes > 0 and days == 0 %} {{ minutes }} мин. {% else %} 1 мин. {% endif %} {% endif %}
-              {% else %}
-                1 мин.
-              {% endif %}
 
     - platform: template
       sensors:
@@ -55,34 +32,48 @@ hallway:
       sensors:
         hallway_motion_status:
           value_template: >
-            {{ is_state('binary_sensor.home_motion_status', 'on') and is_state('input_boolean.hallway_motion_state', 'on') and is_state('binary_sensor.motion_hallway', 'on') }}
+            {{
+              is_state('binary_sensor.home_motion_status', 'on') and is_state('input_boolean.hallway_motion_state', 'on') and
+              (is_state('binary_sensor.motion_hallway', 'on') or is_state('binary_sensor.door_hallway', 'on'))
+            }}
           device_class: motion
 
-  automation:
-    - id: Свет в прихожей
-      alias: hallway_automation_light
-      use_blueprint:
-        path: motion_switch.yaml
-        input:
-          motion_entity: binary_sensor.hallway_motion_status
-          switch_entity: switch.tuya_switch_double_hallway_right
-          turn_off_no_motion: 75
-          turn_off_wait: 75
+        hallway_light_status:
+          value_template: >
+            {{ is_state('binary_sensor.hallway_motion_status', 'off') and is_state('switch.tuya_switch_double_hallway_right', 'on') }}
 
-    - id: Запись последнего движения в прихожей
-      alias: motion_time_hallway
+  automation:
+    ##### ОСВЕЩЕНИЕ ########################################################
+    - id: Включение освещения в прихожей
+      alias: hallway_light_on
       initial_state: true
       trigger:
         - platform: state
-          entity_id: binary_sensor.motion_hallway
+          entity_id: binary_sensor.hallway_motion_status
           to: "on"
+      condition:
+        - condition: state
+          entity_id: switch.tuya_switch_double_hallway_right
+          state: "off"
       action:
-        - service: mqtt.publish
-          data_template:
-            topic: "binary_sensor/motion_hallway"
-            payload: "{{ states('sensor.date_time_iso') }}"
-            retain: true
+        - service: switch.turn_on
+          entity_id:
+            - switch.tuya_switch_double_hallway_right
 
+    - id: Выключение освещения в прихожей
+      alias: hallway_light_off
+      initial_state: true
+      trigger:
+        - platform: state
+          entity_id: binary_sensor.hallway_light_status
+          to: "on"
+          for: "00:02:00"
+      action:
+        - service: switch.turn_off
+          entity_id:
+            - switch.tuya_switch_double_hallway_right
+
+    ##### ЗАПИСИ ###########################################################
     - id: Запись последнего закрытия двери
       alias: door_close_time_hallway
       initial_state: true

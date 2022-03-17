@@ -4,36 +4,16 @@ storage:
       name: Активность движения в кладовке
       icon: mdi:motion-sensor
 
-  sensor:
-    - platform: mqtt
-      state_topic: "binary_sensor/motion_storage"
-      name: "mqtt_binary_sensor_motion_storage"
-
-    - platform: template
-      sensors:
-        motion_detected_storage:
-          friendly_name: "Движение в кладовке было"
-          icon_template: mdi:run-fast
-          value_template: >-
-            {% set uptime = as_timestamp(now()) - as_timestamp(states.sensor.mqtt_binary_sensor_motion_storage.state) | int %}
-            {% set minutes = ((uptime % 3600) / 60) | int %}
-            {% set hours = ((uptime % 86400) / 3600) | int %}
-            {% set days = (uptime / 86400) | int %}
-              {% if uptime > 1 %}
-                {% if days > 0 %} {{ days }} д. {% endif %}
-                {% if hours > 0 %} {{ hours }} ч. {% endif %}
-                {% if minutes > 0 and days > 0 %} {{ minutes }} м. {% else %}
-                {% if minutes > 0 and days == 0 %} {{ minutes }} мин. {% else %} 1 мин. {% endif %} {% endif %}
-              {% else %}
-                1 мин.
-              {% endif %}
-
   binary_sensor:
     - platform: template
       sensors:
         storage_motion_status:
           value_template: >
-            {{ is_state('binary_sensor.home_motion_status', 'on') and is_state('input_boolean.storage_motion_state', 'on') and is_state('binary_sensor.motion_storage', 'on') }}
+            {{
+              is_state('binary_sensor.home_motion_status', 'on') and
+              is_state('input_boolean.storage_motion_state', 'on') and
+              is_state('binary_sensor.motion_storage', 'on')
+            }}
           device_class: motion
 
   automation:
@@ -46,17 +26,3 @@ storage:
           switch_entity: switch.tuya_switch_double_hallway_left
           turn_off_no_motion: 60
           turn_off_wait: 60
-
-    - id: Запись последнего движения в кладовке
-      alias: motion_time_storage
-      initial_state: true
-      trigger:
-        - platform: state
-          entity_id: binary_sensor.motion_storage
-          to: "on"
-      action:
-        - service: mqtt.publish
-          data_template:
-            topic: "binary_sensor/motion_storage"
-            payload: "{{ states('sensor.date_time_iso') }}"
-            retain: true
