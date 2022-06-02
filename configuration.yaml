@@ -23,8 +23,6 @@ mobile_app:
 sun:
 # API для предоставления информации о системе и ее компонентах
 system_health:
-# Сенсор для отображения последней версии НА
-updater:
 # Потоковое изображение с камер
 stream:
 # Включение истории
@@ -70,11 +68,12 @@ recorder: !include includes/recorder.yaml
 sensor: !include_dir_merge_list includes/sensors
 binary_sensor: !include_dir_merge_list includes/bin_sensors
 
-yandex_smart_home:
-  filter:
-    include_domains:
-      - switch
-    include_entity_globs:
-      - sensor.illuminance_*
-      - sensor.temperature_*
-      - sensor.humidity_*
+# yandex_smart_home:
+#   filter:
+#     include_domains:
+#       - switch
+#       - light
+#     include_entity_globs:
+#       - sensor.illuminance_*
+#       - sensor.temperature_*
+#       - sensor.humidity_*

@@ -21,3 +21,9 @@ switch.tuya_switch_double_hallway_right:
 switch.tuya_switch_double_passage_left:
   friendly_name: Свет в ванной
   icon: mdi:light-recessed
+
+light.aqara_bulb_workroom_table:
+  friendly_name: Лампа в кабинете
+
+light.aqara_bulb_bedroom_table:
+  friendly_name: Лампа в спальне
